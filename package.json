@@ -9,7 +9,7 @@
     "prebuild": "rimraf dist",
     "build": "nest build && npm run copy:assets",
     "copy:assets": "copyfiles firebase-adminsdk.json AuthKey.p8 .env.production .env.development ecosystem.config.js images/* dist",
-    "start": "cross-env INLINE_RUNTIME_CHUNK=false NODE_ENV=development nest start --watch",
+    "start": "npx cross-env INLINE_RUNTIME_CHUNK=false NODE_ENV=development nest start --watch",
     "start:docker": "nest start",
     "docker": "INLINE_RUNTIME_CHUNK=false nest start",
     "start:dev": "cross-env INLINE_RUNTIME_CHUNK=false NODE_ENV=development nest start --watch",
