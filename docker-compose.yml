@@ -1,0 +1,38 @@
+# Copyright 2023, the hatemragab project author.
+# All rights reserved. Use of this source code is governed by a
+# MIT license that can be found in the LICENSE file.
+
+version: '3'
+
+services:
+  api:
+    build: . # builds the current directory (where your Dockerfile is)
+    ports:
+      - "3000:3000" # maps port 3000 inside the container to port 3000 on your host
+    environment:
+      - NODE_ENV=production
+    volumes:
+      - ./public:/app/public # mount the public folder
+      - ./.env.production:/app/.env.production # mount the .env.production file
+    networks:
+      - my-network
+    depends_on:
+      - mongo
+    restart: always
+
+  mongo:
+    image: mongo:6.0
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=myuser_xxx
+      - MONGO_INITDB_ROOT_PASSWORD=mypassword_xxx
+    volumes:
+      - mongo-data:/data/db
+    restart: always
+    ports:
+      - "27017:27017"
+    networks:
+      - my-network
+volumes:
+  mongo-data:
+networks:
+  my-network:

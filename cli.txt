@@ -1,0 +1,62 @@
+nest g resource user --no-spec
+nest g resource message --no-spec
+nest g resource room --no-spec
+nest g s message.status --no-spec
+nest g resource s3_uploader --no-spec
+nest g resource following.system --no-spec
+nest g resource me --no-spec
+nest g resource channel --no-spec
+nest g resource pin --no-spec
+nest g resource admin-panel --no-spec
+nest g resource app_config --no-spec
+nest g resource user_device --no-spec
+nest g resource task_category --no-spec
+nest g resource auth --no-spec
+nest g resource broadcast_member --no-spec
+nest g resource group_member --no-spec
+nest g resource group_settings --no-spec
+nest g resource broadcast_settings --no-spec
+nest g resource single_room_settings --no-spec
+nest g resource room_middleware --no-spec
+nest g resource user_ban --no-spec
+nest g resource message_reaction --no-spec
+nest g resource group_message_status --no-spec
+nest g resource report_system --no-spec
+nest g resource message_member --no-spec
+nest g resource room_middleware --no-spec
+nest g resource app_redis --no-spec
+nest g resource user_admin --no-spec
+nest g resource agora --no-spec
+nest g resource story --no-spec
+nest g resource user_story --no-spec
+nest g resource db_migrate --no-spec
+nest g resource first_run --no-spec
+
+nest g resource chat_request --no-spec
+
+the queries need to just send one message to broadcast with only one user
+1- get Broadcast members one request
+2- "Message" create 3 queries to database to save 3 message object one for me another for the 2 single chat between me and the other user
+this is the problem here because if we have 1K users and send one message to them, we will create 1 for me and 2*1000 for each single
+chat between me and each user so total is 2001 request
+3- "Socket" do 2 socket emits one for me and another for the other user if we have 1K users then will do 1001 emit
+4- "notifications" do single request for each user to get his fcm key if we have to send to 1K then 1K request will process
+
+single chat cost
+1- one request to get the chat
+2- one request to save the message
+3- one socket emit request
+4- one request to get user fcm key
+
+group chat
+1- one request to get the chat
+2- one request to save the message
+3- one socket emit request
+4- (group member count) * 1 to get user fcm key
+create broadcast with 100 user
+1- 100 request to check if i have single chat with this user
+if i don't have then go throw the create single chat process for this user to create the single chat it about 7 requests
+2- create the broadcast one request
+3- create room member 102 request for each user
+4- go throw all the process of send message to broadcast
+

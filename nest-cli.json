@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json.schemastore.org/nest-cli",
+  "collection": "@nestjs/schematics",
+  "sourceRoot": "src",
+  "compilerOptions": {
+    "deleteOutDir": true,
+    "assets": [
+      "api/mail/templates/**/*",
+      "ecosystem.config.js",
+      "firebase-adminsdk.json",
+      "captain-definition",
+      "captain-definition-test",
+      "countries.json",
+      {
+        "include": "i18n/**/*",
+        "watchAssets": true
+      }
+    ],
+    "watchAssets": true
+  },
+  "exclude": [
+    "node_modules",
+    "dist",
+    "public",
+    "web"
+  ],
+  "watchOptions": {
+    "excludeFiles": [
+      "web",
+      "public",
+      "admin",
+      "dist",
+      "node_modules"
+    ]
+  }
+}
